@@ -15,10 +15,10 @@ playlists = db.playlists
 
 
 # OUR MOCK ARRAY OF PROJECTS
-playlists = [
-    {'title': 'Cat Videos', 'description': 'Cats acting weird'},
-    {'title': '80\'s Music', 'description': 'Don\'t stop believing!'}
-]
+# playlists = [
+#     {'title': 'Cat Videos', 'description': 'Cats acting weird'},
+#     {'title': '80\'s Music', 'description': 'Don\'t stop believing!'}
+# ]
 
 
 @app.route('/')
@@ -39,6 +39,12 @@ def playlists_submit():
     return redirect(url_for('playlists_show', playlist_id=playlist_id))
 
 
+@app.route('/playlists/new')
+def playlists_new():
+    """Create a new playlist."""
+    return render_template('playlists_new.html', playlist={}, title='New Playlist')
+
+
 @app.route('/playlists/<playlist_id>', methods=['POST'])
 def playlists_update(playlist_id):
     """Submit an edited playlist."""
@@ -51,12 +57,6 @@ def playlists_update(playlist_id):
         {'_id': ObjectId(playlist_id)},
         {'$set': updated_playlist})
     return redirect(url_for('playlists_show', playlist_id=playlist_id))
-
-
-@app.route('/playlists/new')
-def playlists_new():
-    """Create a new playlist."""
-    return render_template('playlists_new.html', playlist={}, title='New Playlist')
 
 
 @app.route('/playlists/<playlist_id>/edit')
