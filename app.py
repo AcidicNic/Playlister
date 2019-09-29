@@ -1,4 +1,4 @@
-from bson import ObjectId
+from bson.objectid import ObjectId
 from flask import Flask, render_template, request, redirect, url_for
 from pymongo import MongoClient
 
@@ -7,18 +7,6 @@ app = Flask(__name__)
 client = MongoClient()
 db = client.Playlister
 playlists = db.playlists
-
-# @app.route('/')
-# def index():
-#     """Show all playlists."""
-#     return render_template('home.html', msg=":) :) :)")
-
-
-# OUR MOCK ARRAY OF PROJECTS
-# playlists = [
-#     {'title': 'Cat Videos', 'description': 'Cats acting weird'},
-#     {'title': '80\'s Music', 'description': 'Don\'t stop believing!'}
-# ]
 
 
 @app.route('/')
@@ -45,7 +33,14 @@ def playlists_new():
     return render_template('playlists_new.html', playlist={}, title='New Playlist')
 
 
-@app.route('/playlists/<playlist_id>', methods=['POST'])
+@app.route('/playlists/<playlist_id>')
+def playlists_show(playlist_id):
+    """Show a single playlist."""
+    playlist = playlists.find_one({'_id': ObjectId(playlist_id)})
+    return render_template('playlists_show.html', playlist=playlist)
+
+
+@app.route('/playlists/<playlist_id>')
 def playlists_update(playlist_id):
     """Submit an edited playlist."""
     updated_playlist = {
